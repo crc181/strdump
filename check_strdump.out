@@ -1,0 +1,22 @@
+64: __STRDUMP_ENABLE__
+65: __STRDUMP_DISABLE__
+81: init
+90: scanned 
+90: chars
+91: output 
+91: tokens
+119: : 
+135: , 
+135: , '
+135: '
+136: (drop=
+136: , elide=
+136: )
+268: '"?
+331: include
+354: diouxXfFeEgGaAcsbzp
+449: usage: strdump [-t] [-c] [-d] <source-file>.-t enable debug trace.-c enable dumping comments.-d start disabled, requires code comments to enable
+460: -t
+462: -c
+464: -d
+486: can't read 

@@ -1,0 +1,33 @@
+60: C++ style one line comment
+61: C style one line comment 
+64: * 1 *
+65: ** 2 **
+66: *** 3 ***
+69: abc.ghi
+70: RST.XYZ 
+71: 01.45.89 
+75: * a
+76: * *multiline*
+77: * comment
+80: no
+81: spaces
+84: lorem ipsum
+86: other.stuff 
+88: don't be.fooled
+90: don't be" fooled again
+93: multi-line string
+97: NOspaces
+101: first string
+102: interesting observation
+103: second string
+106: %%  %%  %%  %%  100% ok 
+113: -- value: %%.
+114: .%%
+115: %%->%%.
+118: this is a "quotable" string
+120: the.quick.brown.fox.jumped.over.the.lazy.dogs
+122: ..w00t.
+124: .octal.8stuff.goes.3here
+126: alas, we need % hueristics for %
+130: maybe output 
+134: always output 

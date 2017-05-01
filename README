@@ -1,0 +1,135 @@
+strdump will emit all the string literals and comments in a given C or C++
+source file.  This can be used as input to a spell checker.  strdump will
+mostly work with C# and Java source files too but needs some tweaks to deal
+with verbatim literals and s1 + s2 concatenation.
+
+strdump only cares about the syntax of strings, comments, and includes
+so the input can actually be any suitable file, such as this one, which is
+useful for documenting and testing strdump.  However, strings, comments, and
+includes must be well formed.
+
+-- leading space is trimmed from strings and comments
+-- multiline strings are concatenated; line number given is for start
+-- multiline comments are not concatenated
+-- #include "header.h" is not output
+-- printf() % format strings are replaced with '%%'
+-- escape sequences are output as a single '.'
+-- a sequence of non-printable characters is output as a single '.'
+-- specific code can be ignored with special comments (see example below)
+
+Limitations include:
+
+-- unicode escape sequences are not supported yet
+-- any % is considered a format specification unless followed by '%', ' ', or '"'
+
+Arguments:
+
+-t enable trace (debugging only)
+-c enable comments (disabled by default)
+-d default disable (only output per comment controls)
+<file> name of file to process
+
+The following are strdump test cases.  See check.out for the expected output when
+running with this file.  See build.sh and run.sh for how to build, test, and use
+strdump.
+
+No output: start
+/ does not start a comment.
+* neither does this.
+
+No output: null comments
+//
+/**/
+""
+
+No output: only spaces
+// 
+/* */
+"  "
+
+No output: not a string
+foo '"' bar
+baz '\"' bat
+
+No output: include
+#include <pink_floyd.h>
+#include "foo.h"
+#  include "bar.h"
+
+Output: one line comments
+// C++ style one line comment
+/* C style one line comment */
+
+Output: don't get confused by repeated *
+/** 1 **/
+/*** 2 ***/
+/**** 3 ****/
+
+Output: elided non-printable chars
+// abcghi
+/* RSTXYZ */
+" 014589 "
+
+Output: multiline comments
+/*
+ * a
+ * *multiline*
+ * comment
+ */
+
+/*no
+spaces*/
+
+Output: basic strings
+"lorem ipsum"
+.
+" otherstuff "
+.
+"don't be\ fooled"
+.
+"don't be\" fooled again"
+
+Output: cat strings
+" multi"
+"-line"
+" string"
+.
+"NO"
+"spaces"
+
+Output: mixed
+" first string"
+// interesting observation
+" second string"
+
+Output: % format strings
+" %u "
+" %3.3s "
+" %*.*s "
+" %hu "
+" 100%% ok "
+
+Output: printf examples
+printf("-- value: %d\n", c);
+printf("\t%s", str);
+printf("%3d->%-5d\t", key, value);
+
+Output: string escapes
+" this is a \"quotable\" string"
+.
+"the\aquick\bbrown\ffox\tjumped\xfadover\vthe\rlazy\ndogs"
+.
+"\xfa\xfbw00t\xfc"
+.
+"\0octal\018stuff\012goes\0123here"
+.
+" alas, we need %"
+" hueristics for % "
+
+Conditional output: depends on -d
+" maybe output "
+// __STRDUMP_DISABLE__
+" never output "
+// __STRDUMP_ENABLE__
+" always output "
+
